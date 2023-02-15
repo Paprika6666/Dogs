@@ -6,16 +6,30 @@
 
 
 .header__wrapper {
-    display: flex;
+    /* display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 80px;
+    gap: 80px; */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+/* padding: 12px 224px; */
+gap: 220px;
+
 }
 .header__left {
     display: flex;
     align-items: center;
     gap: 20px;
 }
+
+.header__right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 @media (max-width: 700px) {
     .header-wrapper {
         flex-direction: column;
