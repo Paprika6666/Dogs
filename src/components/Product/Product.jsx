@@ -5,7 +5,6 @@ import cn from 'classnames';
 import { ReactComponent as Save } from './img/save.svg';
 import { useEffect, useState } from 'react';
 import { api } from '../../Utils/api.js';
-import { useParams } from 'react-router-dom';
 
 const product_id = '63ecf77059b98b038f77b65f';
 
@@ -14,6 +13,7 @@ export const Product = ({ currentUser, id }) => {
   useEffect(() => {
     api.getProductById(id).then((data) => setProduct(data));
   }, [id]);
+
 
 
   const isLiked = product?.likes?.some((el) => el === currentUser._id);

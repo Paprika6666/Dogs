@@ -17,23 +17,37 @@ class Api {
         this._baseUrl = data.baseUrl;
         this._headers = data.headers;
     }
-    getProductList (page=1) {
+    getProductList (page=2) {
         return fetch(`${this._baseUrl}/products?page=${page}`, {
         headers: this._headers,
     }).then((res) => onResponce(res));
 }
 
 getProductById (id) {
-    return fetch(`${this._baseUrl}/products${id}`, {
+    console.log (id);
+    return fetch(`${this._baseUrl}/products/${id}`, {
     headers: this._headers,
+
 }).then((res) => onResponce(res));
 }
 
-addProduct (data) {
+addProduct () {
     return fetch(`${this._baseUrl}/products`, {
     headers: this._headers,
     method: 'POST',
-    body: JSON.stringify (data)
+    body: JSON.stringify ({
+        "name": "Фунтик",
+        "price": 1000,
+        "discount": 15,
+        "wight": "10-15 шт.",
+        "description": "Найден котик",
+        // "favorite": true,
+        // "isCart": false,
+        "available": true,
+        "stock": 10,
+        "pictures": "https://http.cat/302"
+
+    }),
 }).then((res) => onResponce(res));
 }
 getUserInfo () {

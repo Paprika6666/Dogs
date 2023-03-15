@@ -16,8 +16,8 @@ export const Header = ({setSearchQuery, searchQuery, parentCounter=0, user  }) =
 
   const [state, setState] = useState (parentCounter);
   const [counter, setCounter] = useState (0);
-  console.log(state);
-  console.log(counter);
+  // console.log(state);
+  // console.log(counter);
   const handleClick = ()=> {
     setState ((st) => !st);
   };

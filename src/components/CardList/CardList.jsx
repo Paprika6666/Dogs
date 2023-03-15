@@ -4,20 +4,24 @@ import './index.css';
 import {useEffect, useState} from 'react';
 
 export const CardList = ({currentUser, cards, setParentCounter, handleProductLike}) => {
-    return (
-    <div className="cards">
-        {cards.map((item)=>{
-            return <Card 
-            currentUser = {currentUser}
-            product = {item} 
-            onProductLike = {handleProductLike} 
-            setParentCounter ={setParentCounter} 
-            {...item} 
-            key={item._id}
-            />; 
-            //rest operator
-        })}
+
+return (
+    <div className='cards' >
+      {cards.map((item) => {
+        // console.log({ item });
         
+        return (
+          <Card
+            key={item._id}
+            currentUser={currentUser}
+            product={item}
+            onProductLike={handleProductLike}
+            setParentCounter={setParentCounter}
+            {...item}
+           
+          />
+        ); // rest operator
+      })}
     </div>
-    );
+  );
 };

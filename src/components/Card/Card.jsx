@@ -1,9 +1,10 @@
 import { ReactComponent as Like } from "./like.svg"
 import './index.css';
+import { Link } from "react-router-dom";
 
 export const Card = ({product, pictures, name, discount, price, stock, setParentCounter, onProductLike, currentUser})=>{
 
-  const isLiked = product.likes.some ((el) => el === currentUser._id)
+  const isLiked = product?.likes?.some ((el) => el === currentUser._id)
   const handleLikeClick = () => {
     onProductLike (product);
   };
@@ -18,14 +19,14 @@ export const Card = ({product, pictures, name, discount, price, stock, setParent
             <Like className='card__liked'/>
             </button>
           </div>
-          <a href ='/' className="card__link">
+          <Link to ={`/product/${product._id}`} className="card__link">
             <img src={pictures} alt='card__image' className="card__image"/>
             <div className="='card__desc">
             <span className="card__price">{price}р</span>
             <span className="card__wight">{stock}pc</span>
             <p className="card__name">{name}</p>    
             </div>
-          </a>
+          </Link>
           <span onClick= {() => setParentCounter((state)=>state+1)} className="card__cart btn btn_type_primary">В корзину</span>
         </div>
     );
