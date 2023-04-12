@@ -3,7 +3,7 @@ const config = {
     headers: {
         'content-type': 'application/json',
       Authorization: 
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2ZhMTUwNzRlZTQxOTk3NWZiZDI5MGUiLCJncm91cCI6Imdyb3VwLTEwIiwiaWF0IjoxNjc3MzMzODYzLCJleHAiOjE3MDg4Njk4NjN9.oyQVTHGfQWwZ7KRTQyv7AZa12NsOEaDv7WruuYRFA5Y'  
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2ZhMTUwNzRlZTQxOTk3NWZiZDI5MGUiLCJncm91cCI6Imdyb3VwLTEwIiwiaWF0IjoxNjgxMjUwNzk4LCJleHAiOjE3MTI3ODY3OTh9.8doliy25ugzYS0ibax36Ja-4KRCrf1xC-ICmmFcPUlA'  
     },
 };
 
@@ -17,14 +17,14 @@ class Api {
         this._baseUrl = data.baseUrl;
         this._headers = data.headers;
     }
-    getProductList (page=2) {
+    getProductList (page=1) {
         return fetch(`${this._baseUrl}/products?page=${page}`, {
         headers: this._headers,
     }).then((res) => onResponce(res));
 }
 
 getProductById (id) {
-    console.log (id);
+    // console.log (id);
     return fetch(`${this._baseUrl}/products/${id}`, {
     headers: this._headers,
 
@@ -36,16 +36,16 @@ addProduct () {
     headers: this._headers,
     method: 'POST',
     body: JSON.stringify ({
-        "name": "Фунтик",
-        "price": 1000,
-        "discount": 15,
+        "name": "Кресло Донна",
+        "price": 500,
+        "discount": 13,
         "wight": "10-15 шт.",
-        "description": "Найден котик",
+        "description": "Кресло мягкое",
         // "favorite": true,
         // "isCart": false,
         "available": true,
         "stock": 10,
-        "pictures": "https://http.cat/302"
+        "pictures": "https://i.yapx.ru/V3aEM.jpg"
 
     }),
 }).then((res) => onResponce(res));

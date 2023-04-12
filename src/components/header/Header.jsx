@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { Logo } from '../Logo/logo';
 import { Search } from '../Search/Search';
@@ -9,13 +9,17 @@ import { ReactComponent as Profile } from './Icons/Profile.svg'
 // import { ReactComponent as Cart } from './Icons/Cart.svg'
 import { ReactComponent as Likes } from './Icons/Likes.svg'
 import Basket from './Icons/Basket';
+import { UserContext } from '../context/userContext';
 
 
 
-export const Header = ({setSearchQuery, searchQuery, parentCounter=0, user  }) => {
+export const Header = ({parentCounter=0 }) => {
 
   const [state, setState] = useState (parentCounter);
   const [counter, setCounter] = useState (0);
+
+const {currentUser, searchQuery, setSearchQuery} = useContext(UserContext);
+
   // console.log(state);
   // console.log(counter);
   const handleClick = ()=> {
@@ -47,9 +51,9 @@ export const Header = ({setSearchQuery, searchQuery, parentCounter=0, user  }) =
               <button disabled = {counter <= 0}
               className ='btn' onClick ={()=> setCounter (counter-1)}>удалить из корзины</button> */}
               <div>
-              <span>{user.email} {' '} </span>
-                <span>{user.name}</span>
-                <span>{user.about}</span>
+              <span>{currentUser.email} {' '} </span>
+                <span>{currentUser.name}</span>
+                <span>{currentUser.about}</span>
                 <div></div>
               </div>
             </div>

@@ -8,20 +8,35 @@ import { api } from '../../Utils/api.js';
 
 const product_id = '63ecf77059b98b038f77b65f';
 
-export const Product = ({ currentUser, id }) => {
+export const Product = ({ currentUser, id, setParentCounter, handleProductLike }) => {
   const [product, setProduct] = useState({});
+  const [productCount, setProductCount] = useState(0);
+  const isLiked = product?.likes?.some((el) => el === currentUser?._id);
+  const [liked, setLiked] = useState (false);
+
   useEffect(() => {
     api.getProductById(id).then((data) => setProduct(data));
   }, [id]);
 
+useEffect (() => {
+  setLiked(isLiked);
+}, [currentUser]);
 
+  console.log ({liked});
+ 
 
-  const isLiked = product?.likes?.some((el) => el === currentUser._id);
+  const handleLike = () => {
+   
+    handleProductLike (product);
+    setLiked ((st) =>!st)
+  };
+
+ 
 
   return (
     <>
       <div className={s.product}>
-        <div className={s.imgWrapper}>
+             <div className={s.imgWrapper}>
           <img className={s.img} src={product.pictures} alt={`Изображение`} />
           {product.tags?.map((e) => (
             <span className={`tag tag_type_${e}`}>{e}</span>
@@ -36,17 +51,19 @@ export const Product = ({ currentUser, id }) => {
           )}
           <div className={s.btnWrap}>
             <div className={s.left}>
-              <button className={s.minus}>-</button>
-              <span className={s.num}>0</span>
-              <button className={s.plus}>+</button>
+              <button className={s.minus} onClick = {()=> productCount > 0 && setProductCount((s)=>s-1)}>-</button>
+              <span className={s.num}>{productCount}</span>
+              <button className={s.plus} onClick = {()=> setProductCount((s)=>s+1)}>+</button>
             </div>
-            <a href='/#' className={`btn btn_type_primary ${s.cart}`}>
+            <button onClick = {()=> setParentCounter ((state) => state + productCount) } 
+            className={`btn btn_type_primary ${s.cart}`}>
               В корзину
-            </a>
+            </button>
           </div>
-          <button className={cn(s.favorite, { [s.favoriteActive]: isLiked })}>
+          <button onClick = {handleLike}
+          className={cn(s.favorite, { [s.favoriteActive]: liked })}>
             <Save />
-            <span>{isLiked ? 'В избранном' : 'В избранное'}</span>
+            <span>{liked ? 'В избранном' : 'В избранное'}</span>
           </button>
           <div className={s.delivery}>
             <img src={truck} alt='truck' />
@@ -72,7 +89,7 @@ export const Product = ({ currentUser, id }) => {
       <div className={s.box}>
         <h2 className={s.title}>Описание</h2>
         <div>{product.description}</div>
-        <h2 className={s.title}>Характеристики</h2>
+        {/* <h2 className={s.title}>Характеристики</h2>
         <div className={s.grid}>
           <div className={s.naming}>Вес</div>
           <div className={s.description}>1 шт 120-200 грамм</div>
@@ -95,7 +112,7 @@ export const Product = ({ currentUser, id }) => {
             </p>
             <p>Следует учесть высокую калорийность продукта.</p>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

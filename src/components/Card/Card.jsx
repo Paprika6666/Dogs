@@ -1,9 +1,22 @@
+import React from "react";
+import { UserContext } from "../context/userContext";
 import { ReactComponent as Like } from "./like.svg"
 import './index.css';
 import { Link } from "react-router-dom";
 
-export const Card = ({product, pictures, name, discount, price, stock, setParentCounter, onProductLike, currentUser})=>{
 
+export const Card = ({
+  product, 
+  pictures, 
+  name, 
+  discount, 
+  price, 
+  stock, 
+  setParentCounter, 
+  onProductLike, 
+  })=>{
+  const {currentUser} = React.useContext(UserContext);
+  
   const isLiked = product?.likes?.some ((el) => el === currentUser._id)
   const handleLikeClick = () => {
     onProductLike (product);
