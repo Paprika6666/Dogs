@@ -1,10 +1,20 @@
+const freshToken = () => {
+    return { headers: {
+        'content-type': 'application/json',
+        Authorization: 
+        localStorage.getItem ('token'),
+      },
+    };
+  };
+
 const config = {
     baseUrl: 'https://api.react-learning.ru',
     headers: {
         'content-type': 'application/json',
       Authorization: 
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2ZhMTUwNzRlZTQxOTk3NWZiZDI5MGUiLCJncm91cCI6Imdyb3VwLTEwIiwiaWF0IjoxNjgxMjUwNzk4LCJleHAiOjE3MTI3ODY3OTh9.8doliy25ugzYS0ibax36Ja-4KRCrf1xC-ICmmFcPUlA'  
+      localStorage.getItem ('token'),
     },
+    freshToken:freshToken
 };
 
 const onResponce = (res) => {
@@ -16,48 +26,70 @@ class Api {
     constructor (data) {
         this._baseUrl = data.baseUrl;
         this._headers = data.headers;
+        this.freshToken = data.freshToken;
     }
-    getProductList (page=1) {
-        return fetch(`${this._baseUrl}/products?page=${page}`, {
-        headers: this._headers,
+    getProductList (limit=300) {
+        return fetch(`${this._baseUrl}/products?limit=${limit}`, {
+       ...this.freshToken(),
     }).then((res) => onResponce(res));
 }
 
 getProductById (id) {
     // console.log (id);
     return fetch(`${this._baseUrl}/products/${id}`, {
-    headers: this._headers,
+        ...this.freshToken(),
+}).then((res) => onResponce(res));
+}
 
+deleteProductById (id) {
+    // console.log (id);
+    return fetch(`${this._baseUrl}/products/${id}`, {
+        ...this.freshToken(),
+    method: 'DELETE',
 }).then((res) => onResponce(res));
 }
 
 addProduct () {
     return fetch(`${this._baseUrl}/products`, {
-    headers: this._headers,
+        ...this.freshToken(),
     method: 'POST',
     body: JSON.stringify ({
-        "name": "Кресло Донна",
-        "price": 500,
-        "discount": 13,
-        "wight": "10-15 шт.",
-        "description": "Кресло мягкое",
-        // "favorite": true,
-        // "isCart": false,
+        "name": "СТУЛ С ПОДЛОКОТНИКАМИ HUNT",
+        "price": 9900,
+        "discount": 4,
+        "wight": "9-12 шт.",
+        "description": "Дизайнерский стул «Hunt» c отделочной строчкой в виде ромба и острыми подлокотниками выглядит стильно и эффектно.",
+        // "reviews": "Очень удобный стул, рекомендую!",
         "available": true,
-        "stock": 10,
-        "pictures": "https://i.yapx.ru/V3aEM.jpg"
+        "stock": 19,
+        "pictures": "https://i.yapx.ru/V48Hz.jpg"
 
     }),
 }).then((res) => onResponce(res));
 }
 getUserInfo () {
     return fetch(`${this._baseUrl}/users/me`, {
-    headers: this._headers,
+        ...this.freshToken(),
 }).then((res) => onResponce(res));
 }
+
+getUsers () {
+    return fetch(`${this._baseUrl}/users`, {
+        ...this.freshToken(),
+}).then((res) => onResponce(res));
+}
+
+//  registerUser(data){
+//     return fetch(`${this._baseUrl}/signup`, {
+//       headers: this._headers,
+//       method: 'POST',
+//       body: JSON.stringify(data),
+//     }).then((res) => onResponce(res));
+//   }
+
 searchProducts (query){
     return fetch(`${this._baseUrl}/products/search?query=${query}`, {
-        headers: this._headers,
+        ...this.freshToken(),
     }).then((res) => onResponce(res));
 }
 // like - true/false
@@ -70,7 +102,7 @@ searchProducts (query){
 
 deleteLike(productId) {
     return fetch(`${this._baseUrl}/products/likes/${productId}`, {
-        headers: this._headers,
+        ...this.freshToken(),
         method: 'DELETE' 
     }).then((res) => onResponce(res));  
 
@@ -78,11 +110,19 @@ deleteLike(productId) {
 
 addLike(productId) {
     return fetch(`${this._baseUrl}/products/likes/${productId}`, {
-        headers: this._headers,
+        ...this.freshToken(),
         method: 'PUT' 
     }).then((res) => onResponce(res));  
-
 }
+
+addReview (productId, body) {
+return fetch(`${this._baseUrl}/products/review/${productId}`, {
+    ...this.freshToken(),
+    method: 'POST',
+    body: JSON.stringify(body)
+}).then((res) => onResponce(res));  
+}
+
 }
 
 export const api = new Api(config);

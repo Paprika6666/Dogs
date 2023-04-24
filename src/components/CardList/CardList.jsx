@@ -1,9 +1,13 @@
 import { Card } from "../Card/Card";
 import './index.css';
 // import data from '../../data/data.json';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
+import {CardContext} from '../context/CardContext'
 
-export const CardList = ({cards, setParentCounter, handleProductLike}) => {
+
+export const CardList = ({cards}) => {
+
+  const { setParentCounter, handleProductLike } = useContext(CardContext)
 
 return (
     <div className='cards'>

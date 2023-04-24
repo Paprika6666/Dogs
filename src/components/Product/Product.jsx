@@ -5,25 +5,48 @@ import cn from 'classnames';
 import { ReactComponent as Save } from './img/save.svg';
 import { useEffect, useState } from 'react';
 import { api } from '../../Utils/api.js';
+import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { CardContext } from '../context/CardContext';
+import { UserContext } from '../context/userContext';
+import { Rating } from '../Rating/Rating';
+import { Form } from '../Form/Form';
+import { useForm } from 'react-hook-form';
+
 
 const product_id = '63ecf77059b98b038f77b65f';
 
-export const Product = ({ currentUser, id, setParentCounter, handleProductLike }) => {
-  const [product, setProduct] = useState({});
+export const Product = ({ currentUser, id, product, onSendReview}) => {
+  
   const [productCount, setProductCount] = useState(0);
   const isLiked = product?.likes?.some((el) => el === currentUser?._id);
   const [liked, setLiked] = useState (false);
+  const { setParentCounter, handleProductLike } = useContext(CardContext)
+  const [rate, setRate] = useState(3);
+  const [users, setUsers] = useState([]);
+  const [currentRating, setCurrentRating] = useState(0);
+  const [reviewsProduct, setReviewsProduct] = useState(product?.reviews.slice(0,5) ?? []);
+  const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    api.getProductById(id).then((data) => setProduct(data));
-  }, [id]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ mode: "onSubmit" });
+
+  const sendReview = async (data) => {
+    const newProduct = await api.addReview(product._id, {text:data.review})
+    onSendReview(newProduct);
+    setReviewsProduct(state => [...newProduct.reviews])
+    setShowForm(false)
+    console.log (data);
+  }
+    
+  const navigate = useNavigate();
 
 useEffect (() => {
   setLiked(isLiked);
 }, [currentUser]);
-
-  console.log ({liked});
- 
 
   const handleLike = () => {
    
@@ -31,10 +54,50 @@ useEffect (() => {
     setLiked ((st) =>!st)
   };
 
- 
+  // console.log({product});
+
+  useEffect(() => {
+    if (!product?.reviews) return;
+    const rateAcc = (product.reviews.reduce((acc, el) => acc = acc + el.rating, 0));
+    const accum = (Math.floor(rateAcc / product.reviews.length))
+    setRate(accum);
+    setCurrentRating(accum)
+  }, [product?.reviews]);
+
+  useEffect(() => {
+    api.getUsers().then((data) => setUsers(data))
+  }, []);
+
+  console.log(users);
+  const getUser = (id) => {
+    if (!users.length) return 'User';
+    const user = users.find(e => e._id === id);
+    console.log(user);
+    return user
+  }
+
+  const options = {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  }
+
+  const textRegister = register ('review', {
+    required: 'Отзыв желателен',
+  });
 
   return (
     <>
+    <div>
+      <span className='auth__info' onClick ={() => navigate(-1)}>{'<'}Назад</span>
+      <h1>{product.name}</h1>
+      <div className={s.rateInfo}>
+        <span>Art <b>2388907</b></span>
+       <Rating rate = {rate} setRate = {setRate} currentRating={currentRating}/>
+        <span>{product?.reviews?.length} отзывов</span>
+      </div>
+    </div>
+    
       <div className={s.product}>
              <div className={s.imgWrapper}>
           <img className={s.img} src={product.pictures} alt={`Изображение`} />
@@ -89,30 +152,37 @@ useEffect (() => {
       <div className={s.box}>
         <h2 className={s.title}>Описание</h2>
         <div>{product.description}</div>
-        {/* <h2 className={s.title}>Характеристики</h2>
-        <div className={s.grid}>
-          <div className={s.naming}>Вес</div>
-          <div className={s.description}>1 шт 120-200 грамм</div>
-          <div className={s.naming}>Цена</div>
-          <div className={s.description}>490 ₽ за 100 грамм</div>
-          <div className={s.naming}>Польза</div>
-          <div className={s.description}>
-            <p>
-              Большое содержание аминокислот и микроэлементов оказывает
-              положительное воздействие на общий обмен веществ собаки.
-            </p>
-            <p>Способствуют укреплению десен и жевательных мышц.</p>
-            <p>
-              Развивают зубочелюстной аппарат, отвлекают собаку во время смены
-              зубов.
-            </p>
-            <p>
-              Имеет цельную волокнистую структуру, при разжевывание получается
-              эффект зубной щетки, лучше всего очищает клыки собак.
-            </p>
-            <p>Следует учесть высокую калорийность продукта.</p>
-          </div>
-        </div> */}
+        </div>
+        <div>
+
+        <div>
+          <button className='btn' onClick = {()=> setShowForm(true)}> Добавить отзыв </button>
+          {showForm &&  <div>
+            <Form submitForm={handleSubmit(sendReview)}>
+              <span>Оставьте ваш отзыв</span>
+              <textarea 
+              {...textRegister} />
+              <button type='submit'> Отправить отзыв</button>
+            </Form>
+          </div>}
+        </div>
+
+          {users && reviewsProduct.map((r) => <div key = {r._id} className= {s.review}>
+           <div className={s.review__author}> 
+           <div className={s.review__info}>
+            <img className={s.review__avatar} src ={getUser(r.author)?.avatar} alt = 'avatar' />
+            <span>{getUser(r.author)?.name ?? 'User'}</span>
+            <span className={s.review__date}>{new Date (r.created_at).toLocaleString ('ru', options)} </span>
+           </div>
+           <Rating rate = {r.rating} isEditable = {false}/>
+            </div>
+           <div className={s.text}>
+            <span>
+            {r.text}
+            </span>
+            
+             </div>
+        </div>)}
       </div>
     </>
   );

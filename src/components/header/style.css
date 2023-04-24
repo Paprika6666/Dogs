@@ -1,6 +1,6 @@
 .header {
     width: 100%;
-    background-color: #FFE44D;
+    background-color: #34d66a;
     padding: 12px;
     }
 
@@ -15,7 +15,7 @@ flex-direction: row;
 justify-content: center;
 align-items: center;
 /* padding: 12px 224px; */
-gap: 220px;
+gap: 120px;
 
 }
 .header__left {
@@ -24,10 +24,22 @@ gap: 220px;
     gap: 20px;
 }
 
+.company {
+    font-size: 38px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-style: oblique;
+    color: rgb(46, 46, 46);
+}
+
 .header__right {
     display: flex;
     align-items: center;
     gap: 20px;
+}
+
+.header__link {
+    text-decoration: none;
+    cursor: pointer;
 }
 
 @media (max-width: 700px) {

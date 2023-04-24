@@ -88,6 +88,87 @@
 	text-align: center;
 }
 
+.rateInfo {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+
+}
+
+.review{
+	border-top: 1px solid #cfd8dc;
+}
+
+.review__author {
+display: flex;
+flex-direction: column;
+gap: 1rem;
+font-weight: 800;
+font-size: 20px;
+line-height: 24px;
+color:black;
+padding: 1rem 0 0 0;
+}
+
+.review__date {
+	padding-left: 20px;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 20px;
+	color: #a5a6a7;
+}
+
+.review__info {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+}
+
+.review__avatar {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+
+
+/* &__form {
+    margin-bottom: 20px;
+    &__text {
+      border: 1px solid #eceff1;
+      border-radius: 16px;
+      padding: 1rem;
+      resize: none;
+    }
+  }
+  &__wrapper {
+    margin-bottom: 20px;
+   
+    
+  }
+  &__show_more {
+    display: flex;
+    // flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 0;
+    span {
+      cursor: pointer;
+      color: orange;
+    }
+  }
+} */
+
+
+
+
+.text {
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 20px;
+	padding-bottom: 20px;
+	color: black;
+	
+}
+
 .delivery {
 	display: flex;
 	background-color: rgba(236, 239, 241, 0.6);
@@ -185,6 +266,8 @@
 	fill: red;
 	stroke: red;
 }
+
+
 
 @media (max-width: 1000px) {
 	.product {

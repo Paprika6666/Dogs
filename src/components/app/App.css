@@ -24,6 +24,14 @@
 	transition: background-color .3s;
 }
 
+.not__auth {
+  display: flex;
+  min-height: 500px;
+  flex: 1 0 auto;
+  justify-content: center;
+  align-items: center;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

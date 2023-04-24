@@ -126,11 +126,11 @@
 }
 
 .btn_type_primary {
-	background-color: #FFE44D;
+	background-color: #34d66a;
 }
 .btn_type_primary:hover {
-	background-color: #FFAA0D;
-	color: #F44336;
+	background-color: #d3ff0d;
+	color: #292929;
 }
 
 .tag {
