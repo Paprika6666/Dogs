@@ -9,6 +9,7 @@ import { UserContext } from '../context/userContext';
 import { CardContext } from '../context/CardContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as Login} from '../header/Icons/login.svg'
+import { ReactComponent as Logout} from '../header/Icons/logout.svg'
 
 export const Header = ({parentCounter=0, setShowModal }) => {
   const {currentUser, searchQuery, setSearchQuery, isAuthentificated} = useContext(UserContext);
@@ -44,20 +45,24 @@ const navigate = useNavigate();
                 <Search setSearchQuery={setSearchQuery}/>
               </div>
               <div className='header__right'>
-               <Likes />
                <Basket count= {counter} />
-               <Profile />
+               {/* <Profile /> */}
              
               {/* избранное */}
-               {/* <div>
-                {favorites.length} 
-                </div> */}
+               <div>
+               <Link to={"/favorites"} className="header__bubble-link">
+              <Likes className="header__liked" />
+              {favorites.length !== 0 && (
+                <span className="header__bubble">{favorites.length}</span>
+              )}
+            </Link>
+                </div>
 
                <div>
                 {!isAuthentificated ? <Link to={'/login'} className='header__link' onClick = {()=> setShowModal(true)}>
                   <Login/>
                 </Link> : 
-                <span className='header__link' onClick = {handleLogout}>logout</span>
+                <span className='header__link' onClick = {handleLogout}><Logout/></span>
                 }                          
                 </div>
               {/* <button className ='btn' onClick ={()=> handleClick()}>В корзину</button>

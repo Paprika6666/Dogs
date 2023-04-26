@@ -50,6 +50,31 @@ gap: 120px;
     }
 }
 
-/* .logo-app {
+.header__liked {
+	fill: transparent;
+	stroke: black;
+	stroke-width: 0.5px
+}
+.header__bubble {
+  background-color: #b40909;
+  color: white;
+  font-size: 11px;
+  width: 19px;
+  height: 14px;
+  border-radius: 30px;
+  position: absolute;
+  left: 45%;
+  bottom: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    } */
+}
+.header__bubble-link {
+  text-decoration: none;
+position: relative;
+}
+.header__link {
+  text-decoration: none;
+
+}

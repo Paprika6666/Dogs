@@ -59,7 +59,6 @@ addProduct () {
         "discount": 4,
         "wight": "9-12 шт.",
         "description": "Дизайнерский стул «Hunt» c отделочной строчкой в виде ромба и острыми подлокотниками выглядит стильно и эффектно.",
-        // "reviews": "Очень удобный стул, рекомендую!",
         "available": true,
         "stock": 19,
         "pictures": "https://i.yapx.ru/V48Hz.jpg"
@@ -122,7 +121,12 @@ return fetch(`${this._baseUrl}/products/review/${productId}`, {
     body: JSON.stringify(body)
 }).then((res) => onResponce(res));  
 }
-
+deleteReview (productId, reviewId) {
+    return fetch(`${this._baseUrl}/products/reviews/${productId}/${reviewId}`, {
+        ...this.freshToken(),
+        method: 'DELETE' 
+    }).then((res) => onResponce(res));  
+}
 }
 
 export const api = new Api(config);

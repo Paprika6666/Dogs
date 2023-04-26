@@ -5,10 +5,12 @@ import './index.css';
 import { CardContext } from "../../components/context/CardContext";
 
 
+
 export const CatalogPage = () => {
 
     const { searchQuery, setSort } = useContext(UserContext);
-    const { cards } = useContext(CardContext)
+    const { cards } = useContext (CardContext)
+   
   
     const sortedItems = [{id: 'Популярные'}, {id: 'Новинки'}, {id: 'Сначала дешевые'}, {id: 'Сначала дорогие'}]
   

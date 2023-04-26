@@ -5,6 +5,10 @@ import { authApi } from '../../../Utils/authApi';
 import { BaseButton } from "../../BaseButton/BaseButton";
 import { Form } from "../../Form/Form";
 import { pattern } from "../../../Utils/validations.js";
+import {ReactComponent as EyeClose} from '../../Auth/eyeClose.svg'
+import {ReactComponent as EyeOpen} from '../../Auth/eyeOpen.svg'
+import { useState } from "react";
+
 
 
 export const Register = ({ setShowModal }) => {
@@ -14,6 +18,7 @@ export const Register = ({ setShowModal }) => {
         formState: { errors },
     } = useForm({ mode: "onSubmit" });
     const navigate = useNavigate();
+    const [type, setType] = useState(false);
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -68,6 +73,9 @@ export const Register = ({ setShowModal }) => {
                         placeholder="password"
                         className="auth__input"
                     />
+                     {/* <span className="form__eye" onClick={() => setType(!type)}>
+                       {type ? <EyeClose/> : <EyeOpen/>}
+                     </span> */}
                     {errors?.password && (
                         <span className="auth__warning">{errors.password?.message}</span>
                     )}

@@ -4,6 +4,7 @@ import { ReactComponent as Like } from "./like.svg"
 import './index.css';
 import { Link } from "react-router-dom";
 import {api} from "../../Utils/api";
+import { findLike } from "../../Utils/utils";
 
 
 export const Card = ({
@@ -18,7 +19,7 @@ export const Card = ({
   })=>{
   const {currentUser} = React.useContext(UserContext);
  
-  const isLiked = product?.likes?.some ((el) => el === currentUser._id)
+  const isLiked = findLike(product,currentUser)
   const handleLikeClick = () => {
     onProductLike (product);
   };

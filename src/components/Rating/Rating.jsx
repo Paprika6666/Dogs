@@ -36,7 +36,7 @@ export const Rating = ({ rate, setRate, currentRating, isEditable = false }) => 
 
     useEffect(() => {
         constructRating(rate)
-    }, [isEditable]);
+    }, [rate]);
 
     return (
         <div>

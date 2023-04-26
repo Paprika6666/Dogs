@@ -7,6 +7,9 @@ import { pattern } from '../../../Utils/validations';
 import { BaseButton } from "../../BaseButton/BaseButton";
 import { Form } from "../../Form/Form";
 import "../style.css";
+import { useState } from "react";
+import {ReactComponent as EyeClose} from '../../Auth/eyeClose.svg'
+import {ReactComponent as EyeOpen} from '../../Auth/eyeOpen.svg'
 
 
 export const Login = ({ setShowModal }) => {
@@ -17,6 +20,7 @@ export const Login = ({ setShowModal }) => {
   } = useForm({ mode: "onSubmit" });
 
   const navigate = useNavigate();
+  const [type, setType] = useState(false);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -72,6 +76,9 @@ export const Login = ({ setShowModal }) => {
             placeholder="password"
             className="auth__input"
           />
+          <span className="form__eye" onClick={() => setType(!type)}>
+              {type ? <EyeClose/> : <EyeOpen/>}
+            </span>
           {errors?.password && (
             <span className="auth__warning">{errors.password?.message}</span>
           )}

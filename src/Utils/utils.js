@@ -17,3 +17,6 @@ export const useDebounce = (searchQuery, delay=500) => {
       }, [searchQuery]);
       return debounceValue;
     };
+
+    export const findLike = (product, currentUser) =>
+  product?.likes?.some((el) => el === currentUser?._id);

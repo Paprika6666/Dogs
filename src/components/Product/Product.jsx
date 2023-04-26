@@ -12,14 +12,18 @@ import { UserContext } from '../context/userContext';
 import { Rating } from '../Rating/Rating';
 import { Form } from '../Form/Form';
 import { useForm } from 'react-hook-form';
+import { BaseButton } from '../BaseButton/BaseButton'
+import { ReactComponent as Basket} from '../Product/img/basket.svg'
+import { findLike } from '../../Utils/utils';
 
 
-const product_id = '63ecf77059b98b038f77b65f';
 
-export const Product = ({ currentUser, id, product, onSendReview}) => {
+// const product_id = '63ecf77059b98b038f77b65f';
+
+export const Product = ({ currentUser, id, product, onSendReview, onDeleteReview}) => {
   
   const [productCount, setProductCount] = useState(0);
-  const isLiked = product?.likes?.some((el) => el === currentUser?._id);
+  const isLiked = findLike(product,currentUser);
   const [liked, setLiked] = useState (false);
   const { setParentCounter, handleProductLike } = useContext(CardContext)
   const [rate, setRate] = useState(3);
@@ -31,35 +35,37 @@ export const Product = ({ currentUser, id, product, onSendReview}) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ mode: "onSubmit" });
 
   const sendReview = async (data) => {
-    const newProduct = await api.addReview(product._id, {text:data.review})
+    const newProduct = await api.addReview(product._id, {text:data.review, rating:rate})
     onSendReview(newProduct);
     setReviewsProduct(state => [...newProduct.reviews])
-    setShowForm(false)
-    console.log (data);
+    setShowForm(false);
+    reset();
   }
-    
+  
   const navigate = useNavigate();
-
-useEffect (() => {
-  setLiked(isLiked);
-}, [currentUser]);
-
+  
+  useEffect (() => {
+    setLiked(isLiked);
+  }, [currentUser]);
+  
   const handleLike = () => {
-   
+    
     handleProductLike (product);
     setLiked ((st) =>!st)
   };
-
+  
   // console.log({product});
-
+  
   useEffect(() => {
     if (!product?.reviews) return;
     const rateAcc = (product.reviews.reduce((acc, el) => acc = acc + el.rating, 0));
     const accum = (Math.floor(rateAcc / product.reviews.length))
+        // console.log (accum);
     setRate(accum);
     setCurrentRating(accum)
   }, [product?.reviews]);
@@ -68,13 +74,22 @@ useEffect (() => {
     api.getUsers().then((data) => setUsers(data))
   }, []);
 
-  console.log(users);
+  // console.log(users);
+
   const getUser = (id) => {
     if (!users.length) return 'User';
+
     const user = users.find(e => e._id === id);
-    console.log(user);
+    if (user?.avatar.includes('default-image')) {
+      return { ...user, avatar: 'https://thumbs.dreamstime.com/b/road-to-love-trees-shape-heart-58864200.jpg' }
+    }
     return user
   }
+
+  const deleteReview = async (id) => {
+      const res = await onDeleteReview(id);
+      setReviewsProduct(() => [...res.reviews])
+    }
 
   const options = {
     day: "numeric",
@@ -86,6 +101,8 @@ useEffect (() => {
     required: 'Отзыв желателен',
   });
 
+  
+
   return (
     <>
     <div>
@@ -93,7 +110,7 @@ useEffect (() => {
       <h1>{product.name}</h1>
       <div className={s.rateInfo}>
         <span>Art <b>2388907</b></span>
-       <Rating rate = {rate} setRate = {setRate} currentRating={currentRating}/>
+       <Rating rate = {currentRating} setRate = {()=>{}}/>
         <span>{product?.reviews?.length} отзывов</span>
       </div>
     </div>
@@ -156,18 +173,22 @@ useEffect (() => {
         <div>
 
         <div>
-          <button className='btn' onClick = {()=> setShowForm(true)}> Добавить отзыв </button>
+          <button className={s.btnRate} onClick = {()=> setShowForm(true)}> Добавить отзыв </button>
           {showForm &&  <div>
-            <Form submitForm={handleSubmit(sendReview)}>
+            <Form className={s.review__form}   submitForm={handleSubmit(sendReview)}>
+              <Rating rate = {rate} isEditable = {true} setRate={setRate}/>
               <span>Оставьте ваш отзыв</span>
-              <textarea 
+              <textarea className={s.review__form__text}
+              placeholder='Ваш отзыв'
               {...textRegister} />
-              <button type='submit'> Отправить отзыв</button>
+              <BaseButton style = {{width: '200px'}} color = {'white'} type='submit'> Отправить отзыв</BaseButton>
             </Form>
           </div>}
         </div>
 
-          {users && reviewsProduct.map((r) => <div key = {r._id} className= {s.review}>
+          {users && reviewsProduct
+          .sort((a,b)=>new Date(b.created_at) - new Date(a.created_at))
+          .map((r) => <div key = {r._id} className= {s.review}>
            <div className={s.review__author}> 
            <div className={s.review__info}>
             <img className={s.review__avatar} src ={getUser(r.author)?.avatar} alt = 'avatar' />
@@ -180,7 +201,11 @@ useEffect (() => {
             <span>
             {r.text}
             </span>
-            
+            {/* <span>{r.author.name}</span> */}
+            {/* console.log (currentUser);
+             {currentUser._id===r.author && */}
+            <Basket onClick ={()=> deleteReview(r._id)} className={s.img__basket}/>
+             {/* } */}
              </div>
         </div>)}
       </div>

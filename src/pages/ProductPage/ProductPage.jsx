@@ -13,6 +13,12 @@ const onSendReview = (newProduct) => {
  setProduct (()=> ({...newProduct}));
 }
 
+const deleteReview = async (id) => {
+  const result = await api.deleteReview(product._id, id);
+  setProduct((state) => ({ ...result }));
+  return result;
+};
+
 useEffect(() => {
     if (!id?.productId){
         return
@@ -26,6 +32,7 @@ useEffect(() => {
     product = {product}
     currentUser = {currentUser} 
     onSendReview={onSendReview}
+    onDeleteReview={deleteReview}
     id = {id.productId}  
     setParentCounter={setParentCounter} 
     handleProductLike={handleProductLike}/>: 

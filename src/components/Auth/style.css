@@ -16,6 +16,7 @@ height: 48px;
 background: #FFFFFF;
 border: 1px solid #CFD8DC;
 border-radius: 12px;
+position: relative;
 }
 
 .auth__input:focus  {
@@ -69,4 +70,12 @@ border-radius: 12px;
       width: fit-content;
     }
   
+.form__eye {
+    position: absolute;
+    left: 80%;
+    bottom: 51%;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
    

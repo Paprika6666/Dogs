@@ -3,7 +3,7 @@ import { Footer } from '../Footer/Footer';
 import { Header } from '../header/Header';
 import './App.css';
 import { api } from '../../Utils/api.js';
-import { useDebounce } from '../../Utils/utils';
+import { findLike, useDebounce } from '../../Utils/utils';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { ProductPage } from '../../pages/ProductPage/ProductPage';
 import { CatalogPage } from '../../pages/CatalogPage/CatalogPage.jsx';
@@ -16,6 +16,7 @@ import { Login } from '../Auth/Login/login';
 import { Register } from '../Auth/Register/register';
 import { ResetPass } from '../Auth/ResetPassword/Resetpassword';
 import { parseJwt } from '../../Utils/parseJwt';
+import { Favorites } from '../Favorites/Favorites';
 
 // import Datepicker from '../DatePicker/DatePicker';
 
@@ -45,18 +46,25 @@ const debounceValueInApp = useDebounce (searchQuery, 500);
 
 
 function handleProductLike (product) {
-  const isLiked = product.likes.some((el)=> el === currentUser._id);
+  const isLiked = findLike(product, currentUser);
     
   isLiked 
   ?  api.deleteLike (product._id).then ((newCard)=>{
     const newCards = cards.map ((e) => e._id === newCard._id ? newCard : e);
-setCards([...newCards]);
+    setCards([...newCards]);
+    setCards(filteredCards(newCards, currentUser._id));
+    setFavorites((state) => state.filter((f) => f._id !== newCard._id));
   })
    : api.addLike (product._id).then ((newCard)=>{
-    const newCards = cards.map ((e) => e._id === newCard._id ? newCard : e);
+    const newCards = cards.map ((e) => e._id === newCard._id ? newCard : e
+    );
     setCards([...newCards]);
-   });
+    setCards(filteredCards(newCards, currentUser._id));
+   setFavorites((favor) => [...favor, newCard]);
+ });
+ return isLiked;
 }
+
 
 
 const clickMe = async () => {
@@ -69,19 +77,19 @@ useEffect(()=>{
   handleSearch (debounceValueInApp);
      }, [debounceValueInApp]);
 
-       useEffect (()=> {
+     useEffect(() => {
+      Promise.all([api.getUserInfo(), api.getProductList()]).then(
+        ([userData, productData]) => {
+          setCurrentUser(userData);
+          const items = filteredCards(productData.products, userData._id);
+          setCards(items);
+          const fav = items.filter((e) => findLike(e, userData));
+          setFavorites(fav);
+        }
+      );
+    }, [isAuthentificated]);
 
-        Promise.all ([api.getUserInfo(), api.getProductList()]).then(
-          ([userData, productData]) =>{
-          setCurrentUser (userData);
-
-
-          // фильтрация по своему id
-          setCards (filteredCards(productData.products, userData._id));
-        });
-        },[isAuthentificated]);
-
-      const navigate = useNavigate();
+      
 
         const setSortCards = (sort) => {
         console.log (sort)
@@ -108,7 +116,7 @@ useEffect(()=>{
       //   const result = await api.registerUser({ ...data, group: "group-10" });
       //   console.log({ result });
       // };
-  
+      const navigate = useNavigate();
       const location = useLocation();
 
           useEffect(() => {
@@ -176,7 +184,7 @@ useEffect(()=>{
                   element={<ProductPage />}
                 ></Route>
                 <Route path="faq" element={<FaqPage />}></Route>
-                {/* <Route path="favorites" element={<Favorites />}></Route> */}
+                <Route path="favorites" element={<Favorites />}></Route>
                 {authRoutes}
                 <Route path="*" element={<NotFound />}></Route>
               </Routes>

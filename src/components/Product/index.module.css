@@ -95,6 +95,21 @@
 
 }
 
+.btnRate {
+	padding: 10px 10px;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 20px;
+	border-radius: 55px;
+	text-decoration: none;
+	display: inline-block;
+	transition: background-color .3s;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	background-color: #34d66a;
+	width: 200px;
+	}
+
 .review{
 	border-top: 1px solid #cfd8dc;
 }
@@ -130,35 +145,21 @@ padding: 1rem 0 0 0;
 	border-radius: 50%;
 }
 
+.review__form {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	gap: 1rem;
+	margin-bottom: 20px;
+}
 
-/* &__form {
-    margin-bottom: 20px;
-    &__text {
-      border: 1px solid #eceff1;
-      border-radius: 16px;
-      padding: 1rem;
-      resize: none;
-    }
-  }
-  &__wrapper {
-    margin-bottom: 20px;
-   
-    
-  }
-  &__show_more {
-    display: flex;
-    // flex-direction: column;
-    gap: 1rem;
-    padding: 1rem 0;
-    span {
-      cursor: pointer;
-      color: orange;
-    }
-  }
-} */
-
-
-
+.review__form__text {
+	border-radius: 12px;
+	padding: 1rem;
+	resize: none;
+	margin-bottom: 20px;
+	
+}
 
 .text {
 	font-weight: 400;
@@ -166,7 +167,14 @@ padding: 1rem 0 0 0;
 	line-height: 20px;
 	padding-bottom: 20px;
 	color: black;
+	display: flex;
+	justify-content: space-between;
+	padding-right: 3rem;
 	
+}
+
+.img__basket {
+	cursor: pointer;
 }
 
 .delivery {
